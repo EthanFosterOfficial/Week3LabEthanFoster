@@ -23,7 +23,7 @@ public class arithmeticCalculatorServlet extends HttpServlet
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
-       getServletContext().getRequestDispatcher("/WEB-INF/arithmiticCalculator.jsp")
+       getServletContext().getRequestDispatcher("/WEB-INF/arithmeticCalculator.jsp")
                 .forward(request, response);
     }
 
@@ -31,10 +31,44 @@ public class arithmeticCalculatorServlet extends HttpServlet
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
+        String first = request.getParameter("first");
+        String second = request.getParameter("second");
+                
+        request.setAttribute("first", first);
+        request.setAttribute("second", second);
+        try
+        {
+            double top;
+            double bottom;
+            top = Double.parseDouble(first);
+            bottom = Double.parseDouble(second);
+            double ans = 0;
+            if(request.getAttribute("+") != null)
+            {
+                ans = top + bottom;
+            }
+            else if(request.getAttribute("-") != null)
+            {
+                ans = top - bottom;
+            }
+            else if(request.getAttribute("*") != null)
+            {
+                ans = top * bottom;
+            }
+            else if(request.getAttribute("%") != null)
+            {
+                ans = top / bottom;
+            }
+            
+            request.setAttribute("message", ans);
+            
+        } catch (NumberFormatException e)
+        {
+            request.setAttribute("message", "Please input your age as a valid Number");
+        }
         
         
-        
-        getServletContext().getRequestDispatcher("/WEB-INF/arithimiticCalculator.jsp")
+        getServletContext().getRequestDispatcher("/WEB-INF/arithimeticCalculator.jsp")
                 .forward(request, response);
     }
 
