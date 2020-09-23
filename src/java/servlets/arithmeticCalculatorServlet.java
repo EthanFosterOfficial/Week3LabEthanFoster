@@ -23,8 +23,10 @@ public class arithmeticCalculatorServlet extends HttpServlet
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
-       getServletContext().getRequestDispatcher("/WEB-INF/arithmeticCalculator.jsp")
+        request.setAttribute("message", "--");
+        getServletContext().getRequestDispatcher("/WEB-INF/arithmeticCalculator.jsp")
                 .forward(request, response);
+
     }
 
     @Override
@@ -33,42 +35,47 @@ public class arithmeticCalculatorServlet extends HttpServlet
     {
         String first = request.getParameter("first");
         String second = request.getParameter("second");
-                
+
         request.setAttribute("first", first);
         request.setAttribute("second", second);
+        
         try
         {
-            double top;
-            double bottom;
-            top = Double.parseDouble(first);
-            bottom = Double.parseDouble(second);
-            double ans = 0;
-            if(request.getAttribute("+") != null)
+
+            int top = Integer.parseInt(first);
+            int bottom = Integer.parseInt(second);
+            int ans = 0;
+
+            if (request.getParameter("+") != null)
             {
                 ans = top + bottom;
-            }
-            else if(request.getAttribute("-") != null)
+                request.setAttribute("message", ans);
+            } else if (request.getParameter("-") != null)
             {
                 ans = top - bottom;
-            }
-            else if(request.getAttribute("*") != null)
+                request.setAttribute("message", ans);
+
+            } else if (request.getParameter("*") != null)
             {
                 ans = top * bottom;
-            }
-            else if(request.getAttribute("%") != null)
+                request.setAttribute("message", ans);
+
+            } else if (request.getParameter("%") != null)
             {
-                ans = top / bottom;
+                ans = top % bottom;
+                request.setAttribute("message", ans);
+
+            } else
+            {
+                request.setAttribute("message", "--");
             }
-            
-            request.setAttribute("message", ans);
-            
+
         } catch (NumberFormatException e)
         {
-            request.setAttribute("message", "Please input your age as a valid Number");
+            request.setAttribute("message", "Invalid");
         }
-        
-        
-        getServletContext().getRequestDispatcher("/WEB-INF/arithimeticCalculator.jsp")
+
+        getServletContext().getRequestDispatcher("/WEB-INF/arithmeticCalculator.jsp")
                 .forward(request, response);
     }
 
